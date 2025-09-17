@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Avatar, AvatarImage } from '../ui/avatar'
@@ -14,6 +14,7 @@ const Navbar = () => {
     const { user } = useSelector(store => store.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const logoutHandler = async () => {
         try {
@@ -32,16 +33,27 @@ const Navbar = () => {
     }
     return (
         <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
-            <nav className="flex items-center justify-between mx-auto max-w-7xl h-20 px-4 sm:px-6 lg:px-8">
-                <Link to="/" className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+            <nav className="flex items-center justify-between mx-auto max-w-7xl h-16 px-3 sm:px-6 lg:px-8">
+                <Link to="/" className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                         {/* Brand Icon: Briefcase or similar Lucide icon */}
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m-7-8h8a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V8a2 2 0 012-2z" /></svg>
                     </div>
-                    <span className="text-2xl font-bold text-gray-900">Path<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Wiser</span></span>
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900">Path<span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Wiser</span></span>
                 </Link>
-                <div className="flex items-center gap-10">
-                    <ul className="flex font-medium items-center gap-6">
+                {/* Hamburger for mobile */}
+                <button className="sm:hidden flex items-center ml-2 p-2 rounded-md hover:bg-blue-50 focus:outline-none" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+                    <svg className="h-6 w-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {menuOpen ? (
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        ) : (
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+                        )}
+                    </svg>
+                </button>
+                {/* Desktop nav */}
+                <div className="hidden sm:flex items-center gap-6">
+                    <ul className="flex font-medium items-center gap-4">
                         {
                             user && user.role === 'recruiter' ? (
                                 <>
@@ -57,29 +69,28 @@ const Navbar = () => {
                             )
                         }
 
-
                     </ul>
                     {/* Always show Login/Signup when user is not logged in */}
                     {!user || user === null ? (
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             <Link to="/login">
-                                <Button variant="outline" className="rounded-xl px-6 h-12 font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-200">Login</Button>
+                                <Button variant="outline" className="rounded-xl px-4 h-10 font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-200 text-sm">Login</Button>
                             </Link>
                             <Link to="/signup">
-                                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl rounded-xl px-6 h-12 transition-all duration-300">Signup</Button>
+                                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl rounded-xl px-4 h-10 transition-all duration-300 text-sm">Signup</Button>
                             </Link>
                         </div>
                     ) : (
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Avatar className="cursor-pointer">
+                                <Avatar className="cursor-pointer w-9 h-9">
                                     <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
                                 </Avatar>
                             </PopoverTrigger>
-                            <PopoverContent className="w-80">
+                            <PopoverContent className="w-64">
                                 <div className=''>
-                                    <div className='flex gap-2 space-y-2'>
-                                        <Avatar className="cursor-pointer">
+                                    <div className='flex gap-2 items-center'>
+                                        <Avatar className="cursor-pointer w-9 h-9">
                                             <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
                                         </Avatar>
                                         <div>
@@ -101,10 +112,53 @@ const Navbar = () => {
                             </PopoverContent>
                         </Popover>
                     )}
-
                 </div>
+                {/* Mobile nav menu */}
+                {menuOpen && (
+                    <div className="absolute top-16 left-0 w-full bg-white border-b border-gray-100 shadow-md flex flex-col items-start px-4 py-4 gap-4 sm:hidden z-40 animate-fade-in">
+                        <ul className="flex flex-col font-medium gap-3 w-full">
+                            {
+                                user && user.role === 'recruiter' ? (
+                                    <>
+                                        <li><Link to="/admin/companies" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Companies</Link></li>
+                                        <li><Link to="/admin/jobs" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Jobs</Link></li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li><Link to="/" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Home</Link></li>
+                                        <li><Link to="/jobs" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Jobs</Link></li>
+                                        <li><Link to="/browse" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Browse</Link></li>
+                                    </>
+                                )
+                            }
+                        </ul>
+                        <div className="flex flex-col gap-2 w-full mt-2">
+                            {!user || user === null ? (
+                                <>
+                                    <Link to="/login" className="w-full" onClick={() => setMenuOpen(false)}>
+                                        <Button variant="outline" className="rounded-xl px-4 h-10 w-full font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-200 text-sm">Login</Button>
+                                    </Link>
+                                    <Link to="/signup" className="w-full" onClick={() => setMenuOpen(false)}>
+                                        <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl rounded-xl px-4 h-10 w-full transition-all duration-300 text-sm">Signup</Button>
+                                    </Link>
+                                </>
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <Avatar className="cursor-pointer w-9 h-9">
+                                        <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
+                                    </Avatar>
+                                    <div>
+                                        <h4 className='font-medium'>{user?.fullname}</h4>
+                                        <Button variant="link" className="p-0"><Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link></Button>
+                                        <Button onClick={() => { logoutHandler(); setMenuOpen(false); }} variant="link" className="p-0">Logout</Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
             </nav>
-        </header>
+    </header>
     )
 }
 

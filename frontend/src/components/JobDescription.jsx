@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 // ...existing code...
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
@@ -18,20 +19,24 @@ const JobDescription = () => {
     const params = useParams();
     const jobId = params.id;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const applyJobHandler = async () => {
+        if (!user) {
+            toast.error("Please login to apply for jobs");
+            navigate("/login");
+            return;
+        }
         try {
             const res = await axios.post(
                 `${APPLICATION_API_END_POINT}/apply/${jobId}`,
                 {}
             );            
-            
             if(res.data.success){
                 setIsApplied(true); // Update the local state
                 const updatedSingleJob = {...singleJob, applications:[...singleJob.applications,{applicant:user?._id}]}
                 dispatch(setSingleJob(updatedSingleJob)); // helps us to real time UI update
                 toast.success(res.data.message);
-
             }
         } catch (error) {
             console.log(error);
