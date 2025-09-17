@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 import { setUser } from './redux/authSlice';
 import { USER_API_END_POINT } from './utils/constant';
 import Navbar from './components/shared/Navbar'
@@ -20,6 +21,7 @@ import PostJob from './components/admin/PostJob'
 import Applicants from './components/admin/Applicants'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 const appRouter = createBrowserRouter([
   {
@@ -84,7 +86,7 @@ function App() {
     // On app load, check for valid session and restore user
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${USER_API_END_POINT}/me`, { withCredentials: true });
+        const res = await axios.get(`${USER_API_END_POINT}/me`);
         if (res.data.success && res.data.user) {
           dispatch(setUser(res.data.user));
         } else {
