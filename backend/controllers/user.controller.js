@@ -61,7 +61,7 @@ export const register = async (req, res) => {
             profile: { profilePhoto: profilePhotoUrl }
         });
 
-        // Optional: auto-login after signup
+        // Auto-login after signup
         const tokenData = { userId: newUser._id };
         const token = jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
 
