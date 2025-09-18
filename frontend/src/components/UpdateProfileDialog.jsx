@@ -7,6 +7,7 @@ import { Loader2 } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/constant'
+const RESUME_API_END_POINT = import.meta.env.VITE_RESUME_API_END_POINT || `${USER_API_END_POINT.replace('/user', '/resume')}`;
 import { setUser } from '@/redux/authSlice'
 import { toast } from 'sonner'
 
@@ -37,17 +38,44 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        let resumeUrl = null;
+        let resumeOriginalName = null;
+        // If a new resume file is selected, upload it first
+        if (input.file && input.file instanceof File) {
+            const resumeForm = new FormData();
+            resumeForm.append("file", input.file);
+            try {
+                const resumeRes = await axios.post(`${RESUME_API_END_POINT}/upload`, resumeForm, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                    withCredentials: true
+                });
+                if (resumeRes.data.success) {
+                    resumeUrl = resumeRes.data.resumeUrl;
+                    resumeOriginalName = input.file.name;
+                } else {
+                    toast.error(resumeRes.data.message || "Resume upload failed");
+                    setLoading(false);
+                    return;
+                }
+            } catch (err) {
+                toast.error("Resume upload failed");
+                setLoading(false);
+                return;
+            }
+        }
+        // Now update other profile fields
         const formData = new FormData();
         formData.append("fullname", input.fullname);
         formData.append("email", input.email);
         formData.append("phoneNumber", input.phoneNumber);
         formData.append("bio", input.bio);
         formData.append("skills", input.skills);
-        if (input.file) {
-            formData.append("file", input.file);
+        if (resumeUrl) {
+            formData.append("resume", resumeUrl);
+            formData.append("resumeOriginalName", resumeOriginalName);
         }
         try {
-            setLoading(true);
             const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
