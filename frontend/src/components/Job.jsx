@@ -47,9 +47,24 @@ const Job = ({ job }) => {
                 <p className="text-xs sm:text-base text-gray-600 line-clamp-2">{job?.description}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-3 mb-3 sm:mb-4">
-                <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base">{job?.position} Positions</Badge>
-                <Badge className="bg-orange-100 text-orange-800 border-orange-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base">{job?.jobType}</Badge>
-                <Badge className="bg-purple-100 text-purple-800 border-purple-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base">{job?.salary}LPA</Badge>
+                <Badge
+                    className="bg-blue-100 text-blue-800 border-blue-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-300 hover:bg-blue-200/80 hover:shadow-md cursor-pointer"
+                    tabIndex={0}
+                >
+                    {job?.position} Positions
+                </Badge>
+                <Badge
+                    className="bg-orange-100 text-orange-800 border-orange-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-orange-300 hover:bg-orange-200/80 hover:shadow-md cursor-pointer"
+                    tabIndex={0}
+                >
+                    {job?.jobType}
+                </Badge>
+                <Badge
+                    className="bg-purple-100 text-purple-800 border-purple-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-purple-300 hover:bg-purple-200/80 hover:shadow-md cursor-pointer"
+                    tabIndex={0}
+                >
+                    {job?.salary}LPA
+                </Badge>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 mt-auto">
                 <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className="rounded-xl px-4 sm:px-6 h-10 sm:h-12 font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-200 w-full sm:w-auto">Details</Button>
