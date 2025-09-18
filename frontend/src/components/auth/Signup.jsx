@@ -16,8 +16,8 @@ const Signup = () => {
         email: "",
         phoneNumber: "",
         password: "",
-        role: "",
-        file: ""
+        role: "student",
+        file: null
     });
     const {user} = useSelector(store=>store.auth);
     const dispatch = useDispatch();
@@ -26,9 +26,12 @@ const Signup = () => {
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     }
+    const fileChangeHandler = (e) => {
+        setInput({ ...input, file: e.target.files?.[0] });
+    }
     const submitHandler = async (e) => {
         e.preventDefault();
-        const formData = new FormData();    //formdata object
+        const formData = new FormData();
         formData.append("fullname", input.fullname);
         formData.append("email", input.email);
         formData.append("phoneNumber", input.phoneNumber);
@@ -37,7 +40,6 @@ const Signup = () => {
         if (input.file) {
             formData.append("file", input.file);
         }
-
         try {
             dispatch(setLoading(true));
             const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
@@ -51,7 +53,7 @@ const Signup = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message);
-        } finally{
+        } finally {
             dispatch(setLoading(false));
         }
     }
@@ -67,12 +69,13 @@ const Signup = () => {
             <div className="flex items-center justify-center min-h-[80vh] px-2">
                 <form onSubmit={submitHandler} className="w-full max-w-xs sm:max-w-md bg-white/80 rounded-2xl shadow-lg p-4 sm:p-8 border border-gray-100 glass-effect">
                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Signup</h2>
+                    <h1 className='font-bold text-lg sm:text-xl mb-3 sm:mb-5 text-center sm:text-left'>Signup</h1>
                     <div className='my-2'>
-                        <Label>Name</Label>
+                        <Label>Full Name</Label>
                         <Input
                             type="text"
-                            value={input.name}
-                            name="name"
+                            value={input.fullname}
+                            name="fullname"
                             onChange={changeEventHandler}
                             placeholder=""
                         />
@@ -88,6 +91,16 @@ const Signup = () => {
                         />
                     </div>
                     <div className='my-2'>
+                        <Label>Phone Number</Label>
+                        <Input
+                            type="text"
+                            value={input.phoneNumber}
+                            name="phoneNumber"
+                            onChange={changeEventHandler}
+                            placeholder=""
+                        />
+                    </div>
+                    <div className='my-2'>
                         <Label>Password</Label>
                         <Input
                             type="password"
@@ -98,16 +111,39 @@ const Signup = () => {
                         />
                     </div>
                     <div className='my-2'>
-                        <Label>Role</Label>
-                        <select
-                            className="w-full border border-gray-300 rounded-md p-2"
-                            value={input.role}
-                            name="role"
-                            onChange={changeEventHandler}
-                        >
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
+                        <Label>Profile Photo</Label>
+                        <Input
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                            onChange={fileChangeHandler}
+                        />
+                    </div>
+                    <div className='flex items-center justify-between'>
+                        <div className="flex items-center gap-4 my-5">
+                            <div className="flex items-center space-x-2">
+                                <Input
+                                    type="radio"
+                                    name="role"
+                                    value="student"
+                                    checked={input.role === 'student'}
+                                    onChange={changeEventHandler}
+                                    className="cursor-pointer"
+                                />
+                                <Label htmlFor="r1">Student</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Input
+                                    type="radio"
+                                    name="role"
+                                    value="recruiter"
+                                    checked={input.role === 'recruiter'}
+                                    onChange={changeEventHandler}
+                                    className="cursor-pointer"
+                                />
+                                <Label htmlFor="r2">Recruiter</Label>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors">Signup</button>
                 </form>
