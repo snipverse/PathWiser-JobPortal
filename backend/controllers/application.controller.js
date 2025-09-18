@@ -1,5 +1,7 @@
 import { Application } from "../models/application.model.js";
 import { Job } from "../models/job.model.js";
+import { sendStatusEmail } from "../utils/sendStatusEmail.js";
+import { User } from "../models/user.model.js";
 
 export const applyJob = async (req, res) => {
     try {
@@ -121,6 +123,18 @@ export const updateStatus = async (req,res) => {
         // update the status
         application.status = status.toLowerCase();
         await application.save();
+
+        // Fetch applicant email and send notification if accepted/rejected
+        const applicant = await User.findById(application.applicant);
+        if (applicant && (status.toLowerCase() === 'accepted' || status.toLowerCase() === 'rejected')) {
+            const subject = `Your job application has been ${status.toLowerCase()}`;
+            const text = `Hello ${applicant.fullname},\n\nYour application for the job has been ${status.toLowerCase()}.\n\nThank you for using PathWiser.`;
+            try {
+                await sendStatusEmail(applicant.email, subject, text);
+            } catch (emailErr) {
+                console.log('Email send error:', emailErr);
+            }
+        }
 
         return res.status(200).json({
             message:"Status updated successfully.",
