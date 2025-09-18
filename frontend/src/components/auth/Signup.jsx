@@ -12,12 +12,11 @@ import { setLoading } from '@/redux/authSlice'
 const Signup = () => {
 
     const [input, setInput] = useState({
-        fullname: "",
         email: "",
-        phoneNumber: "",
         password: "",
-        role: "",
-        file: ""
+        fullname: "",
+        phoneNumber: "",
+        role: "student",
     });
     const {user} = useSelector(store=>store.auth);
     const dispatch = useDispatch();
@@ -67,12 +66,13 @@ const Signup = () => {
             <div className="flex items-center justify-center min-h-[80vh] px-2">
                 <form onSubmit={submitHandler} className="w-full max-w-xs sm:max-w-md bg-white/80 rounded-2xl shadow-lg p-4 sm:p-8 border border-gray-100 glass-effect">
                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Signup</h2>
+                    <h1 className='font-bold text-lg sm:text-xl mb-3 sm:mb-5 text-center sm:text-left'>Signup</h1>
                     <div className='my-2'>
-                        <Label>Name</Label>
+                        <Label>Full Name</Label>
                         <Input
                             type="text"
-                            value={input.name}
-                            name="name"
+                            value={input.fullname}
+                            name="fullname"
                             onChange={changeEventHandler}
                             placeholder=""
                         />
@@ -88,6 +88,16 @@ const Signup = () => {
                         />
                     </div>
                     <div className='my-2'>
+                        <Label>Phone Number</Label>
+                        <Input
+                            type="text"
+                            value={input.phoneNumber}
+                            name="phoneNumber"
+                            onChange={changeEventHandler}
+                            placeholder=""
+                        />
+                    </div>
+                    <div className='my-2'>
                         <Label>Password</Label>
                         <Input
                             type="password"
@@ -97,17 +107,31 @@ const Signup = () => {
                             placeholder=""
                         />
                     </div>
-                    <div className='my-2'>
-                        <Label>Role</Label>
-                        <select
-                            className="w-full border border-gray-300 rounded-md p-2"
-                            value={input.role}
-                            name="role"
-                            onChange={changeEventHandler}
-                        >
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
+                    <div className='flex items-center justify-between'>
+                        <div className="flex items-center gap-4 my-5">
+                            <div className="flex items-center space-x-2">
+                                <Input
+                                    type="radio"
+                                    name="role"
+                                    value="student"
+                                    checked={input.role === 'student'}
+                                    onChange={changeEventHandler}
+                                    className="cursor-pointer"
+                                />
+                                <Label htmlFor="r1">Student</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Input
+                                    type="radio"
+                                    name="role"
+                                    value="recruiter"
+                                    checked={input.role === 'recruiter'}
+                                    onChange={changeEventHandler}
+                                    className="cursor-pointer"
+                                />
+                                <Label htmlFor="r2">Recruiter</Label>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors">Signup</button>
                 </form>
