@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
@@ -11,38 +11,54 @@ import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 
-const companyArray = [];
+
 
 const PostJob = () => {
     const [input, setInput] = useState({
         title: "",
         description: "",
         requirements: "",
-        salary: "",
+        salary: "", // keep as string
         location: "",
         jobType: "",
-        experience: "",
-        position: 0,
-        companyId: ""
+        experienceLevel: "", // rename to match backend
+        position: 0, // keep as number
+        company: "" // rename to match backend
     });
     const [loading, setLoading]= useState(false);
     const navigate = useNavigate();
 
     const { companies } = useSelector(store => store.company);
     const changeEventHandler = (e) => {
-        setInput({ ...input, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === "position") {
+            // Remove leading zeros and allow empty value
+            let sanitized = value.replace(/^0+(?!$)/, '');
+            // If input is empty, set to empty string, else convert to number
+            setInput({ ...input, [name]: sanitized === '' ? '' : Number(sanitized) });
+        } else {
+            setInput({ ...input, [name]: value });
+        }
     };
 
     const selectChangeHandler = (value) => {
         const selectedCompany = companies.find((company)=> company.name.toLowerCase() === value);
-        setInput({...input, companyId:selectedCompany._id});
+        setInput({...input, company: selectedCompany._id});
     };
 
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await axios.post(`${JOB_API_END_POINT}/post`, input,{
+            const payload = {
+                ...input,
+                salary: input.salary, // string
+                position: input.position, // number
+                requirements: input.requirements, // string
+                experience: input.experienceLevel, // backend expects 'experience'
+                companyId: input.company // backend expects 'companyId'
+            };
+            const res = await axios.post(`${JOB_API_END_POINT}/post`, payload,{
                 headers:{
                     'Content-Type':'application/json'
                 },
@@ -129,20 +145,22 @@ const PostJob = () => {
                             <Label>Experience Level</Label>
                             <Input
                                 type="text"
-                                name="experience"
-                                value={input.experience}
+                                name="experienceLevel"
+                                value={input.experienceLevel}
                                 onChange={changeEventHandler}
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
                             />
                         </div>
                         <div>
-                            <Label>No of Postion</Label>
+                            <Label>No of Position</Label>
                             <Input
                                 type="number"
                                 name="position"
-                                value={input.position}
+                                value={input.position === 0 ? '' : input.position}
                                 onChange={changeEventHandler}
                                 className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1"
+                                min={1}
+                                inputMode="numeric"
                             />
                         </div>
                         {
@@ -156,7 +174,7 @@ const PostJob = () => {
                                             {
                                                 companies.map((company) => {
                                                     return (
-                                                        <SelectItem value={company?.name?.toLowerCase()}>{company.name}</SelectItem>
+                                                        <SelectItem key={company._id} value={company?.name?.toLowerCase()}>{company.name}</SelectItem>
                                                     )
                                                 })
                                             }
