@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Navbar from '../shared/Navbar'
 import ApplicantsTable from './ApplicantsTable'
 import axios from 'axios';
@@ -22,13 +22,15 @@ const Applicants = () => {
             }
         }
         fetchAllApplicants();
-    }, []);
+    }, [dispatch, params.id]);
     return (
-        <div>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
             <Navbar />
-            <div className='max-w-7xl mx-auto'>
-                <h1 className='font-bold text-xl my-5'>Applicants {applicants?.applications?.length}</h1>
-                <ApplicantsTable />
+            <div className='max-w-3xl mx-auto px-2 sm:px-4 py-6 sm:py-10'>
+                <h1 className='font-bold text-lg sm:text-xl my-4 sm:my-5 text-center'>Applicants {applicants?.applications?.length}</h1>
+                <div className="overflow-x-auto">
+                    <ApplicantsTable />
+                </div>
             </div>
         </div>
     )

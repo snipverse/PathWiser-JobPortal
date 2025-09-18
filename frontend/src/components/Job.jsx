@@ -27,34 +27,32 @@ const Job = ({ job }) => {
 
 
     return (
-        <div className="bg-white/80 rounded-2xl shadow-lg border border-gray-100 glass-effect p-6 flex flex-col justify-between min-h-[370px]">
+        <div className="bg-white/80 rounded-2xl shadow-lg border border-gray-100 glass-effect p-4 sm:p-6 flex flex-col justify-between min-h-[340px] sm:min-h-[370px]">
             <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-500 font-medium">{daysAgoFunction(job?.createdAt) === 0 ? "Today" : `${daysAgoFunction(job?.createdAt)} days ago`}</span>
-
+                <span className="text-xs sm:text-sm text-gray-500 font-medium">{daysAgoFunction(job?.createdAt) === 0 ? "Today" : `${daysAgoFunction(job?.createdAt)} days ago`}</span>
             </div>
-            <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center shadow">
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center shadow">
                     <Avatar>
                         <AvatarImage src={job?.company?.logo} />
                     </Avatar>
                 </div>
                 <div>
-                    <h2 className="font-semibold text-lg text-gray-900">{job?.company?.name}</h2>
-                    <p className="text-sm text-gray-500">India</p>
+                    <h2 className="font-semibold text-base sm:text-lg text-gray-900">{job?.company?.name}</h2>
+                    <p className="text-xs sm:text-sm text-gray-500">India</p>
                 </div>
             </div>
             <div className="mb-2">
-                <h1 className="font-bold text-xl text-gray-900 mb-1">{job?.title}</h1>
-                <p className="text-base text-gray-600">{job?.description}</p>
+                <h1 className="font-bold text-base sm:text-xl text-gray-900 mb-1">{job?.title}</h1>
+                <p className="text-xs sm:text-base text-gray-600 line-clamp-2">{job?.description}</p>
             </div>
-            <div className="flex flex-wrap items-center gap-2 mt-3 mb-4">
-                <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-semibold rounded-xl px-3 py-1">{job?.position} Positions</Badge>
-                <Badge className="bg-orange-100 text-orange-800 border-orange-200 font-semibold rounded-xl px-3 py-1">{job?.jobType}</Badge>
-                <Badge className="bg-purple-100 text-purple-800 border-purple-200 font-semibold rounded-xl px-3 py-1">{job?.salary}LPA</Badge>
+            <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-3 mb-3 sm:mb-4">
+                <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base">{job?.position} Positions</Badge>
+                <Badge className="bg-orange-100 text-orange-800 border-orange-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base">{job?.jobType}</Badge>
+                <Badge className="bg-purple-100 text-purple-800 border-purple-200 font-semibold rounded-xl px-2 sm:px-3 py-1 text-xs sm:text-base">{job?.salary}LPA</Badge>
             </div>
-            <div className="flex items-center gap-3 mt-auto">
-                <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className="rounded-xl px-6 h-12 font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-200">Details</Button>
-
+            <div className="flex items-center gap-2 sm:gap-3 mt-auto">
+                <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className="rounded-xl px-4 sm:px-6 h-10 sm:h-12 font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-200 w-full sm:w-auto">Details</Button>
             </div>
         </div>
     )

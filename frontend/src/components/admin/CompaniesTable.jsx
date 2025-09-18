@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-// ...existing code...
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -23,29 +22,29 @@ const CompaniesTable = () => {
     },[companies,searchCompanyByText])
     return (
         <div className="overflow-x-auto">
-            <Table className="bg-white/80 rounded-xl shadow-lg border border-gray-100 glass-effect">
+            <Table className="text-xs sm:text-base min-w-[500px] bg-white/80 rounded-xl shadow-lg border border-gray-100 glass-effect">
                 <TableCaption className="text-gray-500">A list of your recent registered companies</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Logo</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead className="whitespace-nowrap">Logo</TableHead>
+                        <TableHead className="whitespace-nowrap">Name</TableHead>
+                        <TableHead className="whitespace-nowrap">Date</TableHead>
+                        <TableHead className="text-right whitespace-nowrap">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {filterCompany?.map((company) => (
                         <TableRow key={company._id} className="hover:bg-blue-50 transition-colors duration-200">
                             <TableCell>
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center shadow">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center shadow">
                                     <Avatar>
                                         <AvatarImage src={company.logo ? company.logo : "https://www.shutterstock.com/image-vector/circle-line-simple-design-logo-600nw-2174926871.jpg"}/>
                                     </Avatar>
                                 </div>
                             </TableCell>
-                            <TableCell className="font-semibold text-gray-900">{company.name}</TableCell>
-                            <TableCell className="text-gray-700">{company.createdAt.split("T")[0]}</TableCell>
-                            <TableCell className="text-right cursor-pointer">
+                            <TableCell className="font-semibold text-gray-900 whitespace-nowrap">{company.name}</TableCell>
+                            <TableCell className="text-gray-700 whitespace-nowrap">{company.createdAt.split("T")[0]}</TableCell>
+                            <TableCell className="text-right cursor-pointer whitespace-nowrap">
                                 <Popover>
                                     <PopoverTrigger><MoreHorizontal className="hover:text-blue-600 transition-colors" /></PopoverTrigger>
                                     <PopoverContent className="w-32">

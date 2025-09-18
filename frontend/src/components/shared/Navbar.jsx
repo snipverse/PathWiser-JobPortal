@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Avatar, AvatarImage } from '../ui/avatar'
@@ -33,7 +33,7 @@ const Navbar = () => {
     }
     return (
         <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
-            <nav className="flex items-center justify-between mx-auto max-w-7xl h-16 px-3 sm:px-6 lg:px-8">
+            <nav className="flex items-center justify-between mx-auto max-w-7xl h-16 px-2 sm:px-6 lg:px-8">
                 <Link to="/" className="flex items-center gap-2 sm:gap-3">
                     <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                         {/* Brand Icon: Briefcase or similar Lucide icon */}

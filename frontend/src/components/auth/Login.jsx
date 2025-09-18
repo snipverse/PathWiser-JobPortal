@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
@@ -47,18 +47,18 @@ const Login = () => {
             dispatch(setLoading(false));
         }
     }
-    useEffect(()=>{
-        if(user){
+    useEffect(() => {
+        if (user) {
             navigate("/");
         }
-    },[])
+    }, [navigate, user]);
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
             <Navbar />
-            <div className="flex items-center justify-center min-h-[80vh]">
-                <form onSubmit={submitHandler} className="w-full max-w-md bg-white/80 rounded-2xl shadow-lg p-8 border border-gray-100 glass-effect">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Login</h2>
-                    <h1 className='font-bold text-xl mb-5'>Login</h1>
+            <div className="flex items-center justify-center min-h-[80vh] px-2">
+                <form onSubmit={submitHandler} className="w-full max-w-xs sm:max-w-md bg-white/80 rounded-2xl shadow-lg p-4 sm:p-8 border border-gray-100 glass-effect">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Login</h2>
+                    <h1 className='font-bold text-lg sm:text-xl mb-3 sm:mb-5 text-center sm:text-left'>Login</h1>
                     <div className='my-2'>
                         <Label>Email</Label>
                         <Input
@@ -69,7 +69,6 @@ const Login = () => {
                             placeholder=""
                         />
                     </div>
-
                     <div className='my-2'>
                         <Label>Password</Label>
                         <Input
@@ -109,11 +108,11 @@ const Login = () => {
                     {
                         loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Login</Button>
                     }
-                    <span className='text-sm'>Don't have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
+                    <span className='text-sm'>Don&apos;t have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
                 </form>
             </div>
         </div>
-    )
+    );
 }
 
 export default Login

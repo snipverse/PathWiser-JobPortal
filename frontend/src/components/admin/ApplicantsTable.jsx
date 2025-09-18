@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { MoreHorizontal } from 'lucide-react';
@@ -26,17 +26,17 @@ const ApplicantsTable = () => {
     }
 
     return (
-        <div>
-            <Table>
-                <TableCaption>A list of your recent applied user</TableCaption>
+        <div className="overflow-x-auto">
+            <Table className="text-xs sm:text-base min-w-[600px] bg-white/80 rounded-xl shadow-lg border border-gray-100 glass-effect">
+                <TableCaption className="text-gray-500">A list of your recent applied user</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>FullName</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Contact</TableHead>
-                        <TableHead>Resume</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead className="whitespace-nowrap">FullName</TableHead>
+                        <TableHead className="whitespace-nowrap">Email</TableHead>
+                        <TableHead className="whitespace-nowrap">Contact</TableHead>
+                        <TableHead className="whitespace-nowrap">Resume</TableHead>
+                        <TableHead className="whitespace-nowrap">Date</TableHead>
+                        <TableHead className="text-right whitespace-nowrap">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -69,13 +69,10 @@ const ApplicantsTable = () => {
                                             }
                                         </PopoverContent>
                                     </Popover>
-
                                 </TableCell>
-
                             </tr>
                         ))
                     }
-
                 </TableBody>
 
             </Table>
