@@ -44,7 +44,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         // If a new resume file is selected, upload it first
         if (input.file && input.file instanceof File) {
             const resumeForm = new FormData();
-            resumeForm.append("file", input.file);
+            resumeForm.append("resume", input.file);
             try {
                 const resumeRes = await axios.post(`${RESUME_API_END_POINT}/upload`, resumeForm, {
                     headers: { 'Content-Type': 'multipart/form-data' },
