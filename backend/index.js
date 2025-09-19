@@ -51,6 +51,21 @@ app.use("/api/v1/resume", resumeRoute);
 // ===================== Server Start =====================
 const PORT = process.env.PORT || 8000;
 
+
+// ===================== SPA Fallback for React Router =====================
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from frontend build
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Fallback: serve index.html for any unknown route (client-side routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
+
 app.listen(PORT, () => {
   connectDB();
   console.log(`Server running at port ${PORT}`);
