@@ -54,7 +54,7 @@ const Signup = () => {
         formData.append("password", input.password);
         formData.append("role", input.role);
         if (input.file) {
-            formData.append("file", input.file);
+            formData.append("resume", input.file);
         }
         try {
             dispatch(setLoading(true));
