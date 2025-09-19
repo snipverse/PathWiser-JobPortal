@@ -103,6 +103,12 @@ const Navbar = () => {
                                             <User2 />
                                             <Button variant="link"> <Link to="/profile">View Profile</Link></Button>
                                         </div>
+                                        {user?.role === 'student' && (
+                                            <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                                                <Button variant="link"> <Link to="/resume-builder">Resume Builder</Link></Button>
+                                            </div>
+                                        )}
                                         <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                             <LogOut />
                                             <Button onClick={logoutHandler} variant="link">Logout</Button>
@@ -150,6 +156,9 @@ const Navbar = () => {
                                     <div>
                                         <h4 className='font-medium'>{user?.fullname}</h4>
                                         <Button variant="link" className="p-0"><Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link></Button>
+                                        {user?.role === 'student' && (
+                                            <Button variant="link" className="p-0"><Link to="/resume-builder" onClick={() => setMenuOpen(false)}>Resume Builder</Link></Button>
+                                        )}
                                         <Button onClick={() => { logoutHandler(); setMenuOpen(false); }} variant="link" className="p-0">Logout</Button>
                                     </div>
                                 </div>
