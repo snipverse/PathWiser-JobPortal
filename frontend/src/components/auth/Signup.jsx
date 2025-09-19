@@ -16,21 +16,37 @@ const Signup = () => {
         email: "",
         phoneNumber: "",
         password: "",
+        confirmPassword: "",
         role: "student",
         file: null
     });
+    const [errors, setErrors] = useState({});
     const {user} = useSelector(store=>store.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
+        setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
     }
     const fileChangeHandler = (e) => {
         setInput({ ...input, file: e.target.files?.[0] });
     }
     const submitHandler = async (e) => {
         e.preventDefault();
+        // Validation
+        const newErrors = {};
+        if (!input.fullname.trim()) newErrors.fullname = "Please enter your full name.";
+        if (!input.email.trim()) newErrors.email = "Email address is required.";
+        if (!input.phoneNumber.trim()) newErrors.phoneNumber = "Phone number is required.";
+        if (!input.password) newErrors.password = "Password cannot be empty.";
+        if (!input.confirmPassword) newErrors.confirmPassword = "Please confirm your password.";
+        if (input.password && input.confirmPassword && input.password !== input.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
+        if (!input.file) newErrors.file = "Profile photo is required.";
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
         const formData = new FormData();
         formData.append("fullname", input.fullname);
         formData.append("email", input.email);
@@ -79,6 +95,7 @@ const Signup = () => {
                             onChange={changeEventHandler}
                             placeholder=""
                         />
+                        {errors.fullname && <div className="text-red-500 text-xs mt-1">{errors.fullname}</div>}
                     </div>
                     <div className='my-2'>
                         <Label>Email</Label>
@@ -89,6 +106,7 @@ const Signup = () => {
                             onChange={changeEventHandler}
                             placeholder=""
                         />
+                        {errors.email && <div className="text-red-500 text-xs mt-1">{errors.email}</div>}
                     </div>
                     <div className='my-2'>
                         <Label>Phone Number</Label>
@@ -99,6 +117,7 @@ const Signup = () => {
                             onChange={changeEventHandler}
                             placeholder=""
                         />
+                        {errors.phoneNumber && <div className="text-red-500 text-xs mt-1">{errors.phoneNumber}</div>}
                     </div>
                     <div className='my-2'>
                         <Label>Password</Label>
@@ -109,6 +128,18 @@ const Signup = () => {
                             onChange={changeEventHandler}
                             placeholder=""
                         />
+                        {errors.password && <div className="text-red-500 text-xs mt-1">{errors.password}</div>}
+                    </div>
+                    <div className='my-2'>
+                        <Label>Confirm Password</Label>
+                        <Input
+                            type="password"
+                            value={input.confirmPassword}
+                            name="confirmPassword"
+                            onChange={changeEventHandler}
+                            placeholder=""
+                        />
+                        {errors.confirmPassword && <div className="text-red-500 text-xs mt-1">{errors.confirmPassword}</div>}
                     </div>
                     <div className='my-2'>
                         <Label>Profile Photo</Label>
@@ -118,6 +149,7 @@ const Signup = () => {
                             accept="image/*"
                             onChange={fileChangeHandler}
                         />
+                        {errors.file && <div className="text-red-500 text-xs mt-1">{errors.file}</div>}
                     </div>
                     <div className='flex items-center justify-between'>
                         <div className="flex items-center gap-4 my-5">
