@@ -43,15 +43,17 @@ const ApplicantsTable = () => {
                     {
                         applicants && applicants?.applications?.map((item) => (
                             <tr key={item._id}>
-                                <TableCell>{item?.applicant?.fullname}</TableCell>
-                                <TableCell>{item?.applicant?.email}</TableCell>
-                                <TableCell>{item?.applicant?.phoneNumber}</TableCell>
-                                <TableCell >
+                                <TableCell>{item?.applicant ? item.applicant.fullname : 'NA'}</TableCell>
+                                <TableCell>{item?.applicant ? item.applicant.email : 'NA'}</TableCell>
+                                <TableCell>{item?.applicant ? item.applicant.phoneNumber : 'NA'}</TableCell>
+                                <TableCell>
                                     {
-                                        item.applicant?.profile?.resume ? <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a> : <span>NA</span>
+                                        item?.applicant?.profile?.resume ? (
+                                            <a className="text-blue-600 cursor-pointer" href={item.applicant.profile.resume} target="_blank" rel="noopener noreferrer">{item.applicant.profile.resumeOriginalName}</a>
+                                        ) : <span>NA</span>
                                     }
                                 </TableCell>
-                                <TableCell>{item?.applicant.createdAt.split("T")[0]}</TableCell>
+                                <TableCell>{item?.applicant?.createdAt ? item.applicant.createdAt.split("T")[0] : 'NA'}</TableCell>
                                 <TableCell className="float-right cursor-pointer">
                                     <Popover>
                                         <PopoverTrigger>
