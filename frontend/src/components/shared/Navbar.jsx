@@ -57,6 +57,9 @@ const Navbar = () => {
                         {user && user.role === 'admin' ? (
                             <>
                                 <li><Link to="/admin" className="hover:text-blue-600 transition-colors duration-200">Admin Dashboard</Link></li>
+                                <li>
+                                    <Button onClick={logoutHandler} variant="outline" className="rounded-xl px-4 h-9 font-medium border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-200 text-sm">Logout</Button>
+                                </li>
                             </>
                         ) : user && user.role === 'recruiter' ? (
                             <>
