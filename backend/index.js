@@ -1,6 +1,5 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 import userRoute from "./routes/user.route.js";
@@ -20,28 +19,26 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // ===================== CORS Setup =====================
+
 const allowedOrigins = [
-  'http://localhost:5173',                  // local dev
-  'https://pathwiser-one.vercel.app',      // old deployed frontend
-  'https://pathwiser-rho.vercel.app'       // new deployed frontend
+  'http://localhost:5173',
+  'https://pathwiser-one.vercel.app',
+  'https://pathwiser-rho.vercel.app'
 ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-      return callback(new Error(msg), false);
-    }
-
-    return callback(null, true);
-  },
-  credentials: true
-};
-
-app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  }
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // ===================== Routes =====================
 app.use("/api/v1/user", userRoute);
