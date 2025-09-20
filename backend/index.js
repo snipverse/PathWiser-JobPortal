@@ -21,7 +21,8 @@ app.use(cookieParser());
 // ===================== CORS Setup =====================
 const allowedOrigins = [
   'http://localhost:5173',                  // local dev
-  'https://pathwiser-one.vercel.app'       // deployed frontend
+  'https://pathwiser-one.vercel.app',      // old deployed frontend
+  'https://pathwiser-rho.vercel.app'       // new deployed frontend
 ];
 
 const corsOptions = {
