@@ -15,19 +15,33 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     setLoading(true);
-    const [users, jobs, applications, companies] = await Promise.all([
-      fetch('/api/v1/admin/users', { credentials: 'include' }).then(r => r.json()),
-      fetch('/api/v1/admin/jobs', { credentials: 'include' }).then(r => r.json()),
-      fetch('/api/v1/admin/applications', { credentials: 'include' }).then(r => r.json()),
-      fetch('/api/v1/admin/companies', { credentials: 'include' }).then(r => r.json()),
-    ]);
-    setStats({
-      users: users.users || [],
-      jobs: jobs.jobs || [],
-      applications: applications.applications || [],
-      companies: companies.companies || [],
-    });
-    setLoading(false);
+    try {
+      const fetchWithCheck = async (url) => {
+        const res = await fetch(url, { credentials: 'include' });
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`Error ${res.status} for ${url}: ${text}`);
+        }
+        return res.json();
+      };
+      const [users, jobs, applications, companies] = await Promise.all([
+        fetchWithCheck('/api/v1/admin/users'),
+        fetchWithCheck('/api/v1/admin/jobs'),
+        fetchWithCheck('/api/v1/admin/applications'),
+        fetchWithCheck('/api/v1/admin/companies'),
+      ]);
+      setStats({
+        users: users.users || [],
+        jobs: jobs.jobs || [],
+        applications: applications.applications || [],
+        companies: companies.companies || [],
+      });
+    } catch (err) {
+      setStats({ users: [], jobs: [], applications: [], companies: [] });
+      alert('Admin API error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
