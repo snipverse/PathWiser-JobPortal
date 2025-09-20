@@ -37,7 +37,12 @@ const Login = () => {
             });
             if (res.data.success) {
                 dispatch(setUser(res.data.user));
-                navigate("/");
+                // Redirect admin to /admin, others to home
+                if (res.data.user.role === 'admin') {
+                  navigate("/admin");
+                } else {
+                  navigate("/");
+                }
                 toast.success(res.data.message);
             }
         } catch (error) {

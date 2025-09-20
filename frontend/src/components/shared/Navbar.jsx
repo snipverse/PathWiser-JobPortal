@@ -54,21 +54,22 @@ const Navbar = () => {
                 {/* Desktop nav */}
                 <div className="hidden sm:flex items-center gap-6">
                     <ul className="flex font-medium items-center gap-4">
-                        {
-                            user && user.role === 'recruiter' ? (
-                                <>
-                                    <li><Link to="/admin/companies" className="hover:text-blue-600 transition-colors duration-200">Companies</Link></li>
-                                    <li><Link to="/admin/jobs" className="hover:text-blue-600 transition-colors duration-200">Jobs</Link></li>
-                                </>
-                            ) : (
-                                <>
-                                    <li><Link to="/" className="hover:text-blue-600 transition-colors duration-200">Home</Link></li>
-                                    <li><Link to="/jobs" className="hover:text-blue-600 transition-colors duration-200">Jobs</Link></li>
-                                    <li><Link to="/browse" className="hover:text-blue-600 transition-colors duration-200">Browse</Link></li>
-                                </>
-                            )
-                        }
-
+                        {user && user.role === 'admin' ? (
+                            <>
+                                <li><Link to="/admin" className="hover:text-blue-600 transition-colors duration-200">Admin Dashboard</Link></li>
+                            </>
+                        ) : user && user.role === 'recruiter' ? (
+                            <>
+                                <li><Link to="/admin/companies" className="hover:text-blue-600 transition-colors duration-200">Companies</Link></li>
+                                <li><Link to="/admin/jobs" className="hover:text-blue-600 transition-colors duration-200">Jobs</Link></li>
+                            </>
+                        ) : (
+                            <>
+                                <li><Link to="/" className="hover:text-blue-600 transition-colors duration-200">Home</Link></li>
+                                <li><Link to="/jobs" className="hover:text-blue-600 transition-colors duration-200">Jobs</Link></li>
+                                <li><Link to="/browse" className="hover:text-blue-600 transition-colors duration-200">Browse</Link></li>
+                            </>
+                        )}
                     </ul>
                     {/* Always show Login/Signup when user is not logged in */}
                     {!user || user === null ? (
