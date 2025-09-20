@@ -11,16 +11,47 @@ const Jobs = () => {
     const { allJobs, searchedQuery } = useSelector(store => store.job);
     const [filterJobs, setFilterJobs] = useState(allJobs);
 
+    // Helper to extract min/max from salary string like '₹22,00,000 - ₹35,00,000 per year (Depending on experience)'
+    const parseSalaryRange = (salaryStr) => {
+        if (!salaryStr) return [null, null];
+        const match = salaryStr.replace(/,/g, '').match(/₹(\d+)\s*-\s*₹(\d+)/);
+        if (match) {
+            return [parseInt(match[1], 10), parseInt(match[2], 10)];
+        }
+        return [null, null];
+    };
+
     useEffect(() => {
         if (searchedQuery) {
+            const query = searchedQuery.toLowerCase();
+            let selectedSalaryRange = null;
+            // If the query looks like a salary range, parse it
+            if (query.includes('₹') && query.includes('-')) {
+                selectedSalaryRange = parseSalaryRange(searchedQuery);
+            }
             const filteredJobs = allJobs.filter((job) => {
-                return job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-                    job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-                    job.location.toLowerCase().includes(searchedQuery.toLowerCase())
-            })
-            setFilterJobs(filteredJobs)
+                // Salary range logic
+                if (selectedSalaryRange && job.salary) {
+                    const [jobMin, jobMax] = parseSalaryRange(job.salary);
+                    const [filterMin, filterMax] = selectedSalaryRange;
+                    if (jobMin !== null && jobMax !== null && filterMin !== null && filterMax !== null) {
+                        // Check if ranges overlap
+                        if (jobMax >= filterMin && jobMin <= filterMax) {
+                            return true;
+                        }
+                    }
+                }
+                // Partial match for location, job role (jobType), title, description
+                return (
+                    (job.location && job.location.toLowerCase().includes(query)) ||
+                    (job.jobType && job.jobType.toLowerCase().includes(query)) ||
+                    (job.title && job.title.toLowerCase().includes(query)) ||
+                    (job.description && job.description.toLowerCase().includes(query))
+                );
+            });
+            setFilterJobs(filteredJobs);
         } else {
-            setFilterJobs(allJobs)
+            setFilterJobs(allJobs);
         }
     }, [allJobs, searchedQuery]);
 

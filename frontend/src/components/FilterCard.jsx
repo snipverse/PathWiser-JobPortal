@@ -10,12 +10,18 @@ const fitlerData = [
         array: ["Delhi NCR", "Bangalore", "Hyderabad", "Pune", "Mumbai"]
     },
     {
-        fitlerType: "Industry",
+        fitlerType: "Job Role",
         array: ["Frontend Developer", "Backend Developer", "FullStack Developer"]
     },
     {
         fitlerType: "Salary",
-        array: ["0-40k", "42-1lakh", "1lakh to 5lakh"]
+        array: [
+            "₹0 - ₹40,000 per year",
+            "₹42,000 - ₹1,00,000 per year",
+            "₹1,00,000 - ₹5,00,000 per year",
+            "₹2,00,000 - ₹3,00,000 per year",
+            "₹22,00,000 - ₹35,00,000 per year (Depending on experience)"
+        ]
     },
 ]
 

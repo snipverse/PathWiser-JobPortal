@@ -85,7 +85,6 @@ const Signup = () => {
             <div className="flex items-center justify-center min-h-[80vh] px-2">
                 <form onSubmit={submitHandler} className="w-full max-w-xs sm:max-w-md bg-white/80 rounded-2xl shadow-lg p-4 sm:p-8 border border-gray-100 glass-effect">
                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Signup</h2>
-                    <h1 className='font-bold text-lg sm:text-xl mb-3 sm:mb-5 text-center sm:text-left'>Signup</h1>
                     <div className='my-2'>
                         <Label>Full Name</Label>
                         <Input

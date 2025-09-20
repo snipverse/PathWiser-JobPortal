@@ -35,7 +35,7 @@ LatestJobCards.propTypes = {
             <div className="flex flex-wrap items-center gap-1 xs:gap-2 mt-2 xs:mt-3">
                 <Badge className="bg-blue-100 text-blue-800 border-blue-200 font-semibold rounded-xl px-2 xs:px-3 py-1 text-xs xs:text-sm">{job?.position} Positions</Badge>
                 <Badge className="bg-orange-100 text-orange-800 border-orange-200 font-semibold rounded-xl px-2 xs:px-3 py-1 text-xs xs:text-sm">{job?.jobType}</Badge>
-                <Badge className="bg-purple-100 text-purple-800 border-purple-200 font-semibold rounded-xl px-2 xs:px-3 py-1 text-xs xs:text-sm">{job?.salary}LPA</Badge>
+                <Badge className="bg-purple-100 text-purple-800 border-purple-200 font-semibold rounded-xl px-2 xs:px-3 py-1 text-xs xs:text-sm">{job?.salary}</Badge>
             </div>
         </div>
     )

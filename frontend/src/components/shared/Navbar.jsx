@@ -153,13 +153,13 @@ const Navbar = () => {
                                     <Avatar className="cursor-pointer w-9 h-9">
                                         <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
                                     </Avatar>
-                                    <div>
+                                    <div className="flex flex-col gap-2">
                                         <h4 className='font-medium'>{user?.fullname}</h4>
-                                        <Button variant="link" className="p-0"><Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link></Button>
+                                        <Button variant="link" className="p-0 text-left"><Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link></Button>
                                         {user?.role === 'student' && (
-                                            <Button variant="link" className="p-0"><Link to="/resume-builder" onClick={() => setMenuOpen(false)}>Resume Builder</Link></Button>
+                                            <Button variant="link" className="p-0 text-left"><Link to="/resume-builder" onClick={() => setMenuOpen(false)}>Resume Builder</Link></Button>
                                         )}
-                                        <Button onClick={() => { logoutHandler(); setMenuOpen(false); }} variant="link" className="p-0">Logout</Button>
+                                        <Button onClick={() => { logoutHandler(); setMenuOpen(false); }} variant="link" className="p-0 text-left">Logout</Button>
                                     </div>
                                 </div>
                             )}
