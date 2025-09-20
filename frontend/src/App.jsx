@@ -18,6 +18,8 @@ import Companies from './components/admin/Companies'
 import CompanyCreate from './components/admin/CompanyCreate'
 import CompanySetup from './components/admin/CompanySetup'
 import AdminJobs from "./components/admin/AdminJobs";
+import AdminDashboard from "./components/admin/AdminDashboard";
+import AdminProtectedRoute from "./components/admin/AdminProtectedRoute";
 import PostJob from './components/admin/PostJob'
 import Applicants from './components/admin/Applicants'
 import ProtectedRoute from './components/admin/ProtectedRoute'
@@ -57,7 +59,11 @@ const appRouter = createBrowserRouter([
     path: "/resume-builder",
     element: <ResumeBuilder />
   },
-  // admin ke liye yha se start hoga
+  // admin dashboard route
+  {
+    path: "/admin",
+    element: <AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>
+  },
   {
     path:"/admin/companies",
     element: <ProtectedRoute><Companies/></ProtectedRoute>
