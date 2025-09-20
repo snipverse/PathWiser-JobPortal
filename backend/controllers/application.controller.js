@@ -126,9 +126,13 @@ export const updateStatus = async (req,res) => {
 
         // Fetch applicant email and send notification if accepted/rejected
         const applicant = await User.findById(application.applicant);
+        // Fetch job and company details for email
+        const jobDetails = await Job.findById(application.job).populate('company');
+        const companyName = jobDetails && jobDetails.company && jobDetails.company.name ? jobDetails.company.name : 'the company';
+        const jobRole = jobDetails && jobDetails.position ? jobDetails.position : 'the job';
         if (applicant && (status.toLowerCase() === 'accepted' || status.toLowerCase() === 'rejected')) {
             const subject = `Your job application has been ${status.toLowerCase()}`;
-            const text = `Hello ${applicant.fullname},\n\nYour application for the job has been ${status.toLowerCase()}.\n\nThank you for using PathWiser.`;
+            const text = `Hello ${applicant.fullname},\n\nYour application for the position of ${jobRole} at ${companyName} has been ${status.toLowerCase()}.\n\nThank you for using PathWiser.`;
             try {
                 await sendStatusEmail(applicant.email, subject, text);
             } catch (emailErr) {

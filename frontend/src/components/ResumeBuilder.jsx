@@ -9,68 +9,138 @@ import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    padding: 32,
     fontFamily: 'Helvetica',
     fontSize: 12,
     backgroundColor: '#f8fafc',
     color: '#22223b',
+    border: '2px solid #3b82f6',
+    borderRadius: 8,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  name: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2563eb',
+    marginBottom: 2,
+  },
+  contact: {
+    fontSize: 11,
+    color: '#374151',
+    marginBottom: 2,
+    textAlign: 'right',
   },
   section: {
-    marginBottom: 12,
+    marginBottom: 16,
   },
-  heading: {
-    fontSize: 18,
+  sectionTitle: {
+    fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 8,
     color: '#3b82f6',
+    marginBottom: 6,
+    borderBottom: '1px solid #e5e7eb',
+    paddingBottom: 2,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   label: {
     fontWeight: 'bold',
     marginBottom: 2,
+    color: '#22223b',
   },
   value: {
     marginBottom: 6,
+    color: '#374151',
+  },
+  bulletList: {
+    marginLeft: 12,
+    marginBottom: 6,
+  },
+  bulletItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 2,
+  },
+  bulletPoint: {
+    width: 8,
+    fontSize: 14,
+    color: '#3b82f6',
   },
   divider: {
     borderBottom: '1px solid #e5e7eb',
-    marginVertical: 8,
+    marginVertical: 10,
   },
 });
 
 
 
 
-const ResumePDF = ({ data }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.heading}>{data.fullname || 'Full Name'}</Text>
-        <Text>{data.email || 'Email'} | {data.phone || 'Phone'}</Text>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.section}>
-        <Text style={styles.label}>Summary</Text>
-        <Text style={styles.value}>{data.summary || 'Short professional summary...'}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Education</Text>
-        <Text style={styles.value}>{data.education || 'Your education details...'}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Experience</Text>
-        <Text style={styles.value}>{data.experience || 'Your work experience...'}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Skills</Text>
-        <Text style={styles.value}>{data.skills || 'Your skills...'}</Text>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Projects</Text>
-        <Text style={styles.value}>{data.projects || 'Your projects...'}</Text>
-      </View>
-    </Page>
-  </Document>
-);
+const ResumePDF = ({ data }) => {
+  // Parse skills and projects as bullet lists
+  const skillsArr = (data.skills || '').split(',').map(s => s.trim()).filter(Boolean);
+  const projectsArr = (data.projects || '').split(',').map(p => p.trim()).filter(Boolean);
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header Row */}
+        <View style={styles.headerRow}>
+          <View>
+            <Text style={styles.name}>{data.fullname || 'Full Name'}</Text>
+          </View>
+          <View>
+            <Text style={styles.contact}>{data.email || 'Email'}</Text>
+            <Text style={styles.contact}>{data.phone || 'Phone'}</Text>
+          </View>
+        </View>
+        <View style={styles.divider} />
+        {/* Summary */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Summary</Text>
+          <Text style={styles.value}>{data.summary || 'Short professional summary...'}</Text>
+        </View>
+        {/* Education */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Education</Text>
+          <Text style={styles.value}>{data.education || 'Your education details...'}</Text>
+        </View>
+        {/* Experience */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Experience</Text>
+          <Text style={styles.value}>{data.experience || 'Your work experience...'}</Text>
+        </View>
+        {/* Skills */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Skills</Text>
+          <View style={styles.bulletList}>
+            {skillsArr.length > 0 ? skillsArr.map((skill, idx) => (
+              <View key={idx} style={styles.bulletItem}>
+                <Text style={styles.bulletPoint}>•</Text>
+                <Text style={styles.value}>{skill}</Text>
+              </View>
+            )) : <Text style={styles.value}>Your skills...</Text>}
+          </View>
+        </View>
+        {/* Projects */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Projects</Text>
+          <View style={styles.bulletList}>
+            {projectsArr.length > 0 ? projectsArr.map((proj, idx) => (
+              <View key={idx} style={styles.bulletItem}>
+                <Text style={styles.bulletPoint}>•</Text>
+                <Text style={styles.value}>{proj}</Text>
+              </View>
+            )) : <Text style={styles.value}>Your projects...</Text>}
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
+};
 
 
 ResumePDF.propTypes = {

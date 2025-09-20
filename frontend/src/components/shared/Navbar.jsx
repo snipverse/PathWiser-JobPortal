@@ -154,12 +154,14 @@ const Navbar = () => {
                                         <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
                                     </Avatar>
                                     <div className="flex flex-col gap-2">
-                                        <h4 className='font-medium'>{user?.fullname}</h4>
-                                        <Button variant="link" className="p-0 text-left"><Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link></Button>
-                                        {user?.role === 'student' && (
-                                            <Button variant="link" className="p-0 text-left"><Link to="/resume-builder" onClick={() => setMenuOpen(false)}>Resume Builder</Link></Button>
-                                        )}
-                                        <Button onClick={() => { logoutHandler(); setMenuOpen(false); }} variant="link" className="p-0 text-left">Logout</Button>
+                                        <h4 className='font-medium mb-1'>{user?.fullname}</h4>
+                                        <div className="flex flex-row flex-wrap gap-2">
+                                            <Button variant="link" className="p-0 min-w-[70px]"><Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link></Button>
+                                            {user?.role === 'student' && (
+                                                <Button variant="link" className="p-0 min-w-[110px]"><Link to="/resume-builder" onClick={() => setMenuOpen(false)}>Resume Builder</Link></Button>
+                                            )}
+                                            <Button onClick={() => { logoutHandler(); setMenuOpen(false); }} variant="link" className="p-0 min-w-[70px]">Logout</Button>
+                                        </div>
                                     </div>
                                 </div>
                             )}
