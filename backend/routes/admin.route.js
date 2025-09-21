@@ -41,13 +41,26 @@ router.patch("/company/:id", async (req, res) => {
 });
 
 // Update application
+import { sendStatusEmail } from "../utils/sendStatusEmail.js";
 router.patch("/application/:id", async (req, res) => {
   const { status } = req.body;
   const application = await Application.findByIdAndUpdate(
     req.params.id,
     { status },
     { new: true }
-  );
+  ).populate('applicant', 'email fullname').populate('job', 'title');
+
+  // Send status email if status changed
+  if (application && application.applicant && application.applicant.email && application.job && application.job.title) {
+    let subject = `Your application status for ${application.job.title} has been updated`;
+    let text = `Hi ${application.applicant.fullname || ''},\n\nYour application status for the job "${application.job.title}" is now: ${status}.\n\nRegards,\nPathWiser Team`;
+    try {
+      await sendStatusEmail(application.applicant.email, subject, text);
+    } catch (e) {
+      // Log but don't block response
+      console.error('Failed to send status email:', e);
+    }
+  }
   res.json({ application });
 });
 

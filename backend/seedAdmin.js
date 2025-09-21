@@ -17,7 +17,7 @@ async function seedAdmin() {
   }
   const hashedPassword = await bcrypt.hash("adminsachin@88", 10);
   const admin = new User({
-    fullname: "Admin User",
+    fullname: "Admin",
     email: adminEmail,
     phoneNumber: 9999999999,
     password: hashedPassword,
@@ -25,7 +25,7 @@ async function seedAdmin() {
     profile: {}
   });
   await admin.save();
-  console.log("Admin user created:", adminEmail, "password: adminsachin@88");
+  console.log("Admin created:", adminEmail, "password: adminsachin@88");
   process.exit(0);
 }
 
