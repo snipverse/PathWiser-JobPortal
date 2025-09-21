@@ -98,13 +98,16 @@ const JobDescription = () => {
                             ) : null}
                         </div>
                     </div>
-                    <Button
-                        onClick={isApplied ? null : applyJobHandler}
-                        disabled={isApplied}
-                        className={`w-full sm:w-auto rounded-xl px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-semibold shadow-lg transition-all duration-300 ${isApplied ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white'}`}
-                    >
-                        {isApplied ? 'Already Applied' : 'Apply Now'}
-                    </Button>
+                    {/* Only show Apply button if user is a student */}
+                    {user?.role === 'student' && (
+                        <Button
+                            onClick={isApplied ? null : applyJobHandler}
+                            disabled={isApplied}
+                            className={`w-full sm:w-auto rounded-xl px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-semibold shadow-lg transition-all duration-300 ${isApplied ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white'}`}
+                        >
+                            {isApplied ? 'Already Applied' : 'Apply Now'}
+                        </Button>
+                    )}
                 </div>
                 <h2 className="border-b border-gray-200 font-semibold text-base sm:text-xl py-3 sm:py-4 text-gray-800 mb-4">Job Description</h2>
                 <div className="space-y-3 sm:space-y-4 text-xs sm:text-base">

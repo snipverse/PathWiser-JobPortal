@@ -128,7 +128,11 @@ const Navbar = () => {
                     <div className="absolute top-16 left-0 w-full bg-white border-b border-gray-100 shadow-md flex flex-col items-start px-4 py-4 gap-4 sm:hidden z-40 animate-fade-in">
                         <ul className="flex flex-col font-medium gap-3 w-full">
                             {
-                                user && user.role === 'recruiter' ? (
+                                user && user.role === 'admin' ? (
+                                    <>
+                                        <li><Link to="/admin" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Admin Dashboard</Link></li>
+                                    </>
+                                ) : user && user.role === 'recruiter' ? (
                                     <>
                                         <li><Link to="/admin/companies" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Companies</Link></li>
                                         <li><Link to="/admin/jobs" className="block py-2 px-2 rounded hover:bg-blue-50 w-full" onClick={() => setMenuOpen(false)}>Jobs</Link></li>

@@ -105,24 +105,25 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-blue-700 mb-8">Admin Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-          <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
-            <h2 className="font-semibold text-lg mb-4 text-blue-600">Jobs, Users, Applications (Monthly)</h2>
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-6 sm:mb-8 text-center sm:text-left">Admin Dashboard</h1>
+        {/* Responsive chart grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-6 sm:mb-10">
+          <div className="bg-white rounded-xl shadow p-4 sm:p-6 border border-gray-100">
+            <h2 className="font-semibold text-base sm:text-lg mb-2 sm:mb-4 text-blue-600">Jobs, Users, Applications (Monthly)</h2>
             <Bar data={barData} />
           </div>
-          <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
-            <h2 className="font-semibold text-lg mb-4 text-blue-600">Users by Role</h2>
+          <div className="bg-white rounded-xl shadow p-4 sm:p-6 border border-gray-100">
+            <h2 className="font-semibold text-base sm:text-lg mb-2 sm:mb-4 text-blue-600">Users by Role</h2>
             <Pie data={pieUserData} />
           </div>
-          <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
-            <h2 className="font-semibold text-lg mb-4 text-blue-600">Applications by Status</h2>
+          <div className="bg-white rounded-xl shadow p-4 sm:p-6 border border-gray-100">
+            <h2 className="font-semibold text-base sm:text-lg mb-2 sm:mb-4 text-blue-600">Applications by Status</h2>
             <Pie data={pieAppData} />
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow p-6 border border-gray-100 mb-10">
-          <h2 className="font-semibold text-lg mb-4 text-blue-600">Growth Trends</h2>
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6 border border-gray-100 mb-6 sm:mb-10">
+          <h2 className="font-semibold text-base sm:text-lg mb-2 sm:mb-4 text-blue-600">Growth Trends</h2>
           <Line data={lineData} />
         </div>
         {/* Users Table */}
@@ -145,7 +146,10 @@ const AdminDashboard = () => {
             { key: 'location', label: 'Location' },
             { key: 'salary', label: 'Salary' },
           ]}
-          data={stats.jobs.map(j => ({ ...j, company: j.company?.name || j.company || '' }))}
+          data={stats.jobs.map(j => ({
+            ...j,
+            company: (j.company && typeof j.company === 'object' && j.company.name) ? j.company.name : (typeof j.company === 'string' ? j.company : ''),
+          }))}
           onDelete={id => handleDelete('job', id)}
         />
         {/* Companies Table */}
@@ -153,10 +157,13 @@ const AdminDashboard = () => {
           title="Companies"
           columns={[
             { key: 'name', label: 'Name' },
-            { key: 'email', label: 'Email' },
+            { key: 'website', label: 'Website' },
             { key: 'location', label: 'Location' },
           ]}
-          data={stats.companies}
+          data={stats.companies.map(c => ({
+            ...c,
+            website: c.website || c.siteUrl || '',
+          }))}
           onDelete={id => handleDelete('company', id)}
         />
         {/* Applications Table */}
@@ -167,7 +174,15 @@ const AdminDashboard = () => {
             { key: 'job', label: 'Job' },
             { key: 'status', label: 'Status' },
           ]}
-          data={stats.applications.map(a => ({ ...a, applicant: a.applicant?.fullname || a.applicant || '', job: a.job?.title || a.job || '' }))}
+          data={stats.applications.map(a => ({
+            ...a,
+            applicant: (a.applicant && typeof a.applicant === 'object')
+              ? (a.applicant.fullname || a.applicant.email || (a.applicant._id || a.applicant))
+              : (a.applicant || ''),
+            job: (a.job && typeof a.job === 'object')
+              ? (a.job.title || (a.job._id || a.job))
+              : (a.job || ''),
+          }))}
           onDelete={id => handleDelete('application', id)}
         />
       </div>
