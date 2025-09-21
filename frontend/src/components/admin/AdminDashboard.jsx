@@ -74,22 +74,35 @@ const AdminDashboard = () => {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
 
-  // Save edit (only for user for now)
+  // Save edit (for user, job, company, application)
   const handleEditSave = async () => {
     setEditLoading(true);
     try {
+      let url = '', body = {};
       if (editModal.type === 'user') {
-        const res = await fetch(`${API_BASE}/api/v1/admin/user/${editForm._id}`, {
+        url = `${API_BASE}/api/v1/admin/user/${editForm._id}`;
+        body = { fullname: editForm.fullname, email: editForm.email, role: editForm.role };
+      } else if (editModal.type === 'job') {
+        url = `${API_BASE}/api/v1/admin/job/${editForm._id}`;
+        body = { title: editForm.title, location: editForm.location, salary: editForm.salary };
+      } else if (editModal.type === 'company') {
+        url = `${API_BASE}/api/v1/admin/company/${editForm._id}`;
+        body = { name: editForm.name, website: editForm.website, location: editForm.location };
+      } else if (editModal.type === 'application') {
+        url = `${API_BASE}/api/v1/admin/application/${editForm._id}`;
+        body = { status: editForm.status };
+      }
+      if (url) {
+        const res = await fetch(url, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({ fullname: editForm.fullname, email: editForm.email, role: editForm.role })
+          body: JSON.stringify(body)
         });
-        if (!res.ok) throw new Error('Failed to update user');
+        if (!res.ok) throw new Error('Failed to update');
         setEditModal({ open: false, type: '', row: null });
         fetchStats();
       }
-      // Add similar logic for job/company/application if needed
     } catch (err) {
       alert(err.message);
     } finally {
@@ -144,27 +157,68 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Navbar />
       {/* Edit Modal */}
-      {editModal.open && editModal.type === 'user' && (
+      {/* Edit Modal for all types */}
+      {editModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Edit User</h2>
+            <h2 className="text-xl font-bold mb-4">Edit {editModal.type.charAt(0).toUpperCase() + editModal.type.slice(1)}</h2>
             <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium mb-1">Full Name</label>
-                <input name="fullname" value={editForm.fullname || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
-                <input name="email" value={editForm.email || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Role</label>
-                <select name="role" value={editForm.role || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2">
-                  <option value="student">Student</option>
-                  <option value="recruiter">Recruiter</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
+              {editModal.type === 'user' && <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Full Name</label>
+                  <input name="fullname" value={editForm.fullname || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Email</label>
+                  <input name="email" value={editForm.email || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Role</label>
+                  <select name="role" value={editForm.role || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2">
+                    <option value="student">Student</option>
+                    <option value="recruiter">Recruiter</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </>}
+              {editModal.type === 'job' && <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <input name="title" value={editForm.title || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Location</label>
+                  <input name="location" value={editForm.location || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Salary</label>
+                  <input name="salary" value={editForm.salary || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+              </>}
+              {editModal.type === 'company' && <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Name</label>
+                  <input name="name" value={editForm.name || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Website</label>
+                  <input name="website" value={editForm.website || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Location</label>
+                  <input name="location" value={editForm.location || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+                </div>
+              </>}
+              {editModal.type === 'application' && <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Status</label>
+                  <select name="status" value={editForm.status || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2">
+                    <option value="pending">Pending</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
+              </>}
             </div>
             <div className="flex justify-end gap-2 mt-6">
               <button onClick={() => setEditModal({ open: false, type: '', row: null })} className="px-4 py-2 rounded bg-gray-200">Cancel</button>
