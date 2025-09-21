@@ -1,3 +1,12 @@
+import express from "express";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
+import isAdmin from "../middlewares/isAdmin.js";
+import { User } from "../models/user.model.js";
+import { Job } from "../models/job.model.js";
+import { Company } from "../models/company.model.js";
+import { Application } from "../models/application.model.js";
+
+const router = express.Router();
 // Update user
 router.patch("/user/:id", async (req, res) => {
   const { fullname, email, role } = req.body;
@@ -41,15 +50,6 @@ router.patch("/application/:id", async (req, res) => {
   );
   res.json({ application });
 });
-import express from "express";
-import isAuthenticated from "../middlewares/isAuthenticated.js";
-import isAdmin from "../middlewares/isAdmin.js";
-import { User } from "../models/user.model.js";
-import { Job } from "../models/job.model.js";
-import { Company } from "../models/company.model.js";
-import { Application } from "../models/application.model.js";
-
-const router = express.Router();
 
 // Protect all admin routes
 router.use(isAuthenticated, isAdmin);
