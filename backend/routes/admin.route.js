@@ -1,3 +1,46 @@
+// Update user
+router.patch("/user/:id", async (req, res) => {
+  const { fullname, email, role } = req.body;
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    { fullname, email, role },
+    { new: true }
+  );
+  res.json({ user });
+});
+
+// Update job
+router.patch("/job/:id", async (req, res) => {
+  const { title, location, salary } = req.body;
+  const job = await Job.findByIdAndUpdate(
+    req.params.id,
+    { title, location, salary },
+    { new: true }
+  );
+  res.json({ job });
+});
+
+// Update company
+router.patch("/company/:id", async (req, res) => {
+  const { name, website, location } = req.body;
+  const company = await Company.findByIdAndUpdate(
+    req.params.id,
+    { name, website, location },
+    { new: true }
+  );
+  res.json({ company });
+});
+
+// Update application
+router.patch("/application/:id", async (req, res) => {
+  const { status } = req.body;
+  const application = await Application.findByIdAndUpdate(
+    req.params.id,
+    { status },
+    { new: true }
+  );
+  res.json({ application });
+});
 import express from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import isAdmin from "../middlewares/isAdmin.js";
