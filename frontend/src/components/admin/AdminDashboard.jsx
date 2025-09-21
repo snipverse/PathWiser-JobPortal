@@ -1,3 +1,4 @@
+const API_BASE = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,7 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       const fetchWithCheck = async (url) => {
-        const res = await fetch(url, { credentials: 'include' });
+        const res = await fetch(`${API_BASE}${url}`, { credentials: 'include' });
         if (!res.ok) {
           const text = await res.text();
           throw new Error(`Error ${res.status} for ${url}: ${text}`);
@@ -54,8 +55,8 @@ const AdminDashboard = () => {
 
   // Delete handlers
   const handleDelete = async (type, id) => {
-    await fetch(`/api/v1/admin/${type}/${id}`, { method: 'DELETE', credentials: 'include' });
-    fetchStats();
+  await fetch(`${API_BASE}/api/v1/admin/${type}/${id}`, { method: 'DELETE', credentials: 'include' });
+  fetchStats();
   };
 
   // Bar Chart: Number of jobs, users, applications over months
