@@ -13,6 +13,10 @@ const AdminDashboard = () => {
   const { user } = useSelector(store => store.auth);
   const [stats, setStats] = useState({ users: [], jobs: [], applications: [], companies: [] });
   const [loading, setLoading] = useState(true);
+  // Edit modal state
+  const [editModal, setEditModal] = useState({ open: false, type: '', row: null });
+  const [editForm, setEditForm] = useState({});
+  const [editLoading, setEditLoading] = useState(false);
 
   const fetchStats = async () => {
     setLoading(true);
@@ -61,8 +65,36 @@ const AdminDashboard = () => {
 
   // Edit handlers (open a modal or alert for now)
   const handleEdit = (type) => (row) => {
-    // You can replace this with a modal or form for editing
-    alert(`Edit ${type}:\n` + JSON.stringify(row, null, 2));
+    setEditModal({ open: true, type, row });
+    setEditForm(row);
+  };
+
+  // Handle edit form change
+  const handleEditFormChange = (e) => {
+    setEditForm({ ...editForm, [e.target.name]: e.target.value });
+  };
+
+  // Save edit (only for user for now)
+  const handleEditSave = async () => {
+    setEditLoading(true);
+    try {
+      if (editModal.type === 'user') {
+        const res = await fetch(`${API_BASE}/api/v1/admin/user/${editForm._id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ fullname: editForm.fullname, email: editForm.email, role: editForm.role })
+        });
+        if (!res.ok) throw new Error('Failed to update user');
+        setEditModal({ open: false, type: '', row: null });
+        fetchStats();
+      }
+      // Add similar logic for job/company/application if needed
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setEditLoading(false);
+    }
   };
 
   // Bar Chart: Number of jobs, users, applications over months
@@ -111,6 +143,36 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Navbar />
+      {/* Edit Modal */}
+      {editModal.open && editModal.type === 'user' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Edit User</h2>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium mb-1">Full Name</label>
+                <input name="fullname" value={editForm.fullname || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input name="email" value={editForm.email || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Role</label>
+                <select name="role" value={editForm.role || ''} onChange={handleEditFormChange} className="w-full border rounded px-3 py-2">
+                  <option value="student">Student</option>
+                  <option value="recruiter">Recruiter</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-6">
+              <button onClick={() => setEditModal({ open: false, type: '', row: null })} className="px-4 py-2 rounded bg-gray-200">Cancel</button>
+              <button onClick={handleEditSave} disabled={editLoading} className="px-4 py-2 rounded bg-blue-600 text-white font-semibold disabled:opacity-60">{editLoading ? 'Saving...' : 'Save'}</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-6 sm:mb-8 text-center sm:text-left">Admin Dashboard</h1>
         {/* Responsive chart grid */}
