@@ -55,8 +55,14 @@ const AdminDashboard = () => {
 
   // Delete handlers
   const handleDelete = async (type, id) => {
-  await fetch(`${API_BASE}/api/v1/admin/${type}/${id}`, { method: 'DELETE', credentials: 'include' });
-  fetchStats();
+    await fetch(`${API_BASE}/api/v1/admin/${type}/${id}`, { method: 'DELETE', credentials: 'include' });
+    fetchStats();
+  };
+
+  // Edit handlers (open a modal or alert for now)
+  const handleEdit = (type) => (row) => {
+    // You can replace this with a modal or form for editing
+    alert(`Edit ${type}:\n` + JSON.stringify(row, null, 2));
   };
 
   // Bar Chart: Number of jobs, users, applications over months
@@ -136,6 +142,7 @@ const AdminDashboard = () => {
           ]}
           data={stats.users}
           onDelete={id => handleDelete('user', id)}
+          onEdit={handleEdit('user')}
         />
         {/* Jobs Table */}
         <AdminTable
@@ -151,6 +158,7 @@ const AdminDashboard = () => {
             company: (j.company && typeof j.company === 'object' && j.company.name) ? j.company.name : (typeof j.company === 'string' ? j.company : ''),
           }))}
           onDelete={id => handleDelete('job', id)}
+          onEdit={handleEdit('job')}
         />
         {/* Companies Table */}
         <AdminTable
@@ -165,6 +173,7 @@ const AdminDashboard = () => {
             website: c.website || c.siteUrl || '',
           }))}
           onDelete={id => handleDelete('company', id)}
+          onEdit={handleEdit('company')}
         />
         {/* Applications Table */}
         <AdminTable
@@ -184,6 +193,7 @@ const AdminDashboard = () => {
               : (a.job || ''),
           }))}
           onDelete={id => handleDelete('application', id)}
+          onEdit={handleEdit('application')}
         />
       </div>
     </div>

@@ -19,7 +19,7 @@ router.get("/users", async (req, res) => {
 
 // Get all jobs
 router.get("/jobs", async (req, res) => {
-  const jobs = await Job.find();
+  const jobs = await Job.find().populate({ path: 'company', select: 'name' });
   res.json({ jobs });
 });
 
@@ -31,7 +31,9 @@ router.get("/companies", async (req, res) => {
 
 // Get all applications
 router.get("/applications", async (req, res) => {
-  const applications = await Application.find();
+  const applications = await Application.find()
+    .populate({ path: 'applicant', select: 'fullname email' })
+    .populate({ path: 'job', select: 'title' });
   res.json({ applications });
 });
 
